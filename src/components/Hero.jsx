@@ -21,7 +21,7 @@ const Hero = () => {
 			<Stack
 				width={{ xs: "100%", md: "60%" }}
 				borderRight={{ xs: "none", md: "2px solid gray" }}
-				gap={"4rem"}
+				gap={"3rem"}
 			>
 				<Typography
 					variant="h1"

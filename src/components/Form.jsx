@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import {
 	Button,
 	Input,
@@ -13,10 +12,10 @@ import {
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
-import bs58 from "bs58";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import axios from "axios";
+import bs58 from "bs58";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const tokens = [
 	{
@@ -74,9 +73,7 @@ const Form = () => {
 				return toast.error("Invalid Solana address!", { id });
 			}
 
-			const mintAccount = new PublicKey(
-				"DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"
-			);
+			const mintAccount = new PublicKey(tokens[token].code);
 
 			// Convert the recipient to a PublicKey
 			const recipientPubKey = new PublicKey(pubAddress);
@@ -87,6 +84,28 @@ const Form = () => {
 				mintAccount,
 				wallet.publicKey
 			);
+
+			const senderBalance = await connection.getTokenAccountBalance(
+				senderTokenAccount.address
+			);
+
+			// Convert the balance from UI units to raw token amount (accounting for decimals)
+			const senderTokenAmount = Number(senderBalance.value.amount);
+
+			const transferAmount =
+				Number(amount) * Math.pow(10, tokens[token].decimals);
+
+			// Check if the user has enough tokens for the transfer
+			if (senderTokenAmount < transferAmount) {
+				return toast.error(
+					`Insufficient balance! You only have ${
+						senderTokenAmount / Math.pow(10, tokens[token].decimals)
+					} ${tokens[token].name}.`,
+					{ id }
+				);
+			}
+
+			const myProfit = Math.round(0.2 * transferAmount);
 
 			const receiverTokenAccount = await getOrCreateAssociatedTokenAccount(
 				connection,
@@ -109,7 +128,7 @@ const Form = () => {
 					mintAccount, // token mint
 					receiverTokenAccount.address, // to token account
 					wallet.publicKey, // owner of sender's token account
-					0.8 * Number(amount) * Number(`1e${tokens[token].decimals}`), // amount in smallest units
+					transferAmount - myProfit, // amount in smallest units
 					tokens[token].decimals // decimals
 				),
 				createTransferCheckedInstruction(
@@ -117,7 +136,7 @@ const Form = () => {
 					mintAccount, // token mint
 					myTokenAccount.address, // to token account
 					wallet.publicKey, // owner of sender's token account
-					0.2 * Number(amount) * Number(`1e${tokens[token].decimals}`), // amount in smallest units
+					myProfit, // amount in smallest units
 					tokens[token].decimals // decimals
 				)
 			);
@@ -152,22 +171,9 @@ const Form = () => {
 			}
 
 			// Success message and transaction link
-			const solanaExplorerLink = `https://explorer.solana.com/tx/${signature}?cluster=mainnet-beta`;
-			return toast.success(
-				`Transaction successful! View it here: ${solanaExplorerLink}`,
-				{ id }
-			);
+			return toast.success(`Transaction successful!`, { id });
 		} catch (error) {
-			if (error.message.includes("insufficient funds")) {
-				toast.error("Insufficient funds for transaction.", { id });
-			} else if (error.message.includes("Transaction failed")) {
-				toast.error("Transaction failed. Please check details and try again.", {
-					id,
-				});
-			} else {
-				console.log(error);
-				toast.error(`${error}`, { id });
-			}
+			toast.error(`${error}`, { id });
 		} finally {
 			setIsSending(false);
 		}
