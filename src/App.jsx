@@ -16,11 +16,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 const App = () => {
 	// You can also provide a custom RPC endpoint.
-	const endpoint = useMemo(
-		() =>
-			"https://bulk-solanam-29fa.mainnet.rpcpool.com/eed85661-9491-43ba-a127-97d11c45a2b7",
-		[]
-	);
+	const endpoint = useMemo(() => import.meta.env.VITE_RPC_URL, []);
 	return (
 		<ConnectionProvider endpoint={endpoint}>
 			<WalletProvider wallets={[]} autoConnect>

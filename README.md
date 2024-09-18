@@ -1,8 +1,28 @@
-# React + Vite
+# SOLGUARD
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+It is a web application that allows users to send tokens to another user without paying gas fees themselves.
 
-Currently, two official plugins are available:
+## Installation
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+  npm install
+  npm run dev
+```
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`VITE_GAS_PAYER`
+`VITE_RPC_URL`
+
+## Screenshots
+
+![App Screenshot](./src/assets/Screenshot%202024-09-18%20191509.png)
+
+![App Screenshot](./src/assets/Screenshot%202024-09-18%20191546.png)
+
+## Authors
+
+- [@LinkedIn](www.linkedin.com/in/david-goyal)
+- [@X](https://x.com/David__Goyal)
