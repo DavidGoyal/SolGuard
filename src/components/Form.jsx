@@ -251,7 +251,7 @@ const Form = () => {
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
 					/>
-					{Number(amount) * price < 3 && (
+					{Number(amount) * price < 0.01 && (
 						<Typography variant="caption" color="error">
 							The value of tokens must be more than $3
 						</Typography>
@@ -262,7 +262,9 @@ const Form = () => {
 					type="submit"
 					variant="contained"
 					sx={{ mt: "1rem" }}
-					disabled={!wallet.publicKey || sending || Number(amount) * price < 3}
+					disabled={
+						!wallet.publicKey || sending || Number(amount) * price < 0.01
+					}
 				>
 					{sending ? "Sending..." : "Send"}
 				</Button>
