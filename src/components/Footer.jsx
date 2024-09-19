@@ -23,7 +23,7 @@ const Footer = () => {
 				<Typography
 					color="white"
 					component={Link}
-					href="https://x.com/p0tatooo1"
+					href="https://x.com/David__Goyal"
 					target="_blank"
 					sx={{ textDecoration: "none", cursor: "pointer" }}
 				>
