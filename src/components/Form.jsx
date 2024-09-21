@@ -247,6 +247,7 @@ const Form = () => {
 							height: "2.5rem",
 							padding: "0.5rem",
 						}}
+						type="number"
 						placeholder="1000"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
